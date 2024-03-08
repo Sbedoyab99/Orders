@@ -33,7 +33,7 @@ namespace Orders.Frontend.Pages.Countries
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
             });
-            var confirm = !string.IsNullOrEmpty(result.Value);
+            var confirm = string.IsNullOrEmpty(result.Value);
             if (confirm)
             {
                 return;
