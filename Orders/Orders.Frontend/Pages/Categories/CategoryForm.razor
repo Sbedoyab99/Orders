@@ -1,13 +1,12 @@
-﻿
-<NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation" />
+﻿<NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation" />
 
 <EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
-    <DataAnnotationsValidator/>
+    <DataAnnotationsValidator />
     <div class="mb-3 ">
         <label>Pais: </label>
         <div>
-            <InputText class="form-control" @bind-Value="@Country.Name"/>
-            <ValidationMessage For="@(() => Country.Name)"/>
+            <InputText class="form-control" @bind-Value="@Category.Name" />
+            <ValidationMessage For="@(() => Category.Name)" />
         </div>
     </div>
     <button class="btn btn-primary" type="submit">Guardar Cambios</button>
