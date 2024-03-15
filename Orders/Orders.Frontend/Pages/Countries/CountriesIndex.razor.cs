@@ -7,24 +7,24 @@ namespace Orders.Frontend.Pages.Countries
 {
     public partial class CountriesIndex
     {
-        [Inject] private IRepository repository { get; set; } = null!;
-        [Inject] private SweetAlertService sweetAlertService { get; set; } = null!;
-        [Inject] private NavigationManager navigationManager { get; set; } = null!;
+        [Inject] private IRepository Repository { get; set; } = null!;
+        [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
+        [Inject] private NavigationManager NavigationManager { get; set; } = null!;
 
         public List<Country>? Countries { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            await LoadAsync();  
+            await LoadAsync();
         }
 
         private async Task LoadAsync()
         {
-            var responseHttp = await repository.GetAsync<List<Country>>("api/countries");
+            var responseHttp = await Repository.GetAsync<List<Country>>("api/countries");
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
-                await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+                await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
                 return;
             }
             Countries = responseHttp.Response;
@@ -32,7 +32,7 @@ namespace Orders.Frontend.Pages.Countries
 
         private async Task DeleteAsync(Country country)
         {
-            var result = await sweetAlertService.FireAsync(new SweetAlertOptions
+            var result = await SweetAlertService.FireAsync(new SweetAlertOptions
             {
                 Title = "Confirmacion",
                 Text = $"¿Estas seguro de borrar el pais: {country.Name}?",
@@ -45,22 +45,22 @@ namespace Orders.Frontend.Pages.Countries
                 return;
             }
 
-            var responseHttp = await repository.DeleteAsync<Country>($"api/countries/{country.Id}");
+            var responseHttp = await Repository.DeleteAsync<Country>($"api/countries/{country.Id}");
             if (responseHttp.Error)
             {
                 if (responseHttp.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
-                    navigationManager.NavigateTo("/countries");
+                    NavigationManager.NavigateTo("/countries");
                 }
                 else
                 {
                     var message = await responseHttp.GetErrorMessageAsync();
-                    await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+                    await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
                 }
                 return;
             }
             await LoadAsync();
-            var toast = sweetAlertService.Mixin(new SweetAlertOptions
+            var toast = SweetAlertService.Mixin(new SweetAlertOptions
             {
                 Toast = true,
                 Position = SweetAlertPosition.BottomEnd,

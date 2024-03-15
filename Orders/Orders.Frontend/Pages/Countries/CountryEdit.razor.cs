@@ -1,6 +1,7 @@
 ﻿using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using Orders.Frontend.Repositories;
+using Orders.Frontend.Shared;
 using Orders.Shared.Entities;
 
 namespace Orders.Frontend.Pages.Countries
@@ -8,26 +9,26 @@ namespace Orders.Frontend.Pages.Countries
     public partial class CountryEdit
     {
         private Country? country;
-        private CountryForm? countryForm;
-        [Inject] public IRepository repository { get; set; } = null!;
-        [Inject] private SweetAlertService sweetAlertService { get; set; } = null!;
-        [Inject] private NavigationManager navigationManager { get; set; } = null!;
+        private FormWithName<Country>? countryForm;
+        [Inject] public IRepository Repository { get; set; } = null!;
+        [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
+        [Inject] private NavigationManager NavigationManager { get; set; } = null!;
 
-        [EditorRequired, Parameter]public int Id { get; set; }
+        [EditorRequired, Parameter] public int Id { get; set; }
 
-        protected async override Task OnParametersSetAsync()
+        protected override async Task OnParametersSetAsync()
         {
-            var responseHttp = await repository.GetAsync<Country>($"/api/countries/{Id}");
+            var responseHttp = await Repository.GetAsync<Country>($"/api/countries/{Id}");
             if (responseHttp.Error)
             {
                 if (responseHttp.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
-                    navigationManager.NavigateTo("/countries");
+                    NavigationManager.NavigateTo("/countries");
                 }
                 else
                 {
                     var message = await responseHttp.GetErrorMessageAsync();
-                    await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+                    await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
                 }
             }
             else
@@ -38,15 +39,15 @@ namespace Orders.Frontend.Pages.Countries
 
         private async Task EditAsync()
         {
-            var responseHttp = await repository.PutAsync("/api/countries", country);
+            var responseHttp = await Repository.PutAsync("/api/countries", country);
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
-                await sweetAlertService.FireAsync("Error", message);
+                await SweetAlertService.FireAsync("Error", message);
                 return;
             }
 
-            var toast = sweetAlertService.Mixin(new SweetAlertOptions
+            var toast = SweetAlertService.Mixin(new SweetAlertOptions
             {
                 Toast = true,
                 Position = SweetAlertPosition.BottomEnd,
@@ -55,13 +56,12 @@ namespace Orders.Frontend.Pages.Countries
             });
 
             Return();
-
         }
 
         private void Return()
         {
             countryForm!.FormPostedSuccessfully = true;
-            navigationManager.NavigateTo("/countries");
+            NavigationManager.NavigateTo("/countries");
         }
     }
 }
