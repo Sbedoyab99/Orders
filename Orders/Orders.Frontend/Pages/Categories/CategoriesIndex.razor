@@ -7,11 +7,15 @@
 </div>
 <GenericList MyList="Categories">
     <Body>
+        <Pagination CurrentPage="currentPage"
+                    TotalPages="totalPages"
+                    SelectedPage="SelectedPageAsync" />
+
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th>Categoria</th>
-                    <th>Acciones</th>
+                    <th style="width:140px">Acciones</th>
                 </tr>
             </thead>
             <tbody>
