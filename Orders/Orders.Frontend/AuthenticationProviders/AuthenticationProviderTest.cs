@@ -17,7 +17,7 @@ namespace Orders.Frontend.AuthenticationProviders
                 new Claim(ClaimTypes.Name, "bedoya@yopmail.com"),
                 new Claim(ClaimTypes.Role, "Admin")
             }, authenticationType: "test");
-            return await Task.FromResult(new AuthenticationState(new ClaimsPrincipal(user)));
+            return await Task.FromResult(new AuthenticationState(new ClaimsPrincipal(admin)));
         }
     }
 }
