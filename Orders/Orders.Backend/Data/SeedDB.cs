@@ -1,4 +1,5 @@
-﻿using Orders.Backend.UnitsOfWork.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using Orders.Backend.UnitsOfWork.Interfaces;
 using Orders.Shared.Entities;
 using Orders.Shared.Enums;
 
@@ -86,66 +87,29 @@ namespace Orders.Backend.Data
 
         private async Task CheckCountriesAsync()
         {
-            if (!_context.Countries.Any())
+            if (_context.Countries.Any())
             {
-                _context.Countries.Add(new Country
-                {
-                    Name = "Colombia",
-                    States = new List<State>()
-            {
-                new State()
-                {
-                    Name = "Antioquia",
-                    Cities = new List<City>() {
-                        new City() { Name = "Medellín" },
-                        new City() { Name = "Itagüí" },
-                        new City() { Name = "Envigado" },
-                        new City() { Name = "Bello" },
-                        new City() { Name = "Rionegro" },
-                    }
-                },
-                new State()
-                {
-                    Name = "Bogotá",
-                    Cities = new List<City>() {
-                        new City() { Name = "Usaquen" },
-                        new City() { Name = "Champinero" },
-                        new City() { Name = "Santa fe" },
-                        new City() { Name = "Useme" },
-                        new City() { Name = "Bosa" },
-                    }
-                },
+                return; // Si ya hay datos, no hagas nada
             }
-                });
-                _context.Countries.Add(new Country
-                {
-                    Name = "Estados Unidos",
-                    States = new List<State>()
+
+            var filePath = "Data/CountriesStatesCities.sql";
+
+            if (!File.Exists(filePath))
             {
-                new State()
-                {
-                    Name = "Florida",
-                    Cities = new List<City>() {
-                        new City() { Name = "Orlando" },
-                        new City() { Name = "Miami" },
-                        new City() { Name = "Tampa" },
-                        new City() { Name = "Fort Lauderdale" },
-                        new City() { Name = "Key West" },
-                    }
-                },
-                new State()
-                {
-                    Name = "Texas",
-                    Cities = new List<City>() {
-                        new City() { Name = "Houston" },
-                        new City() { Name = "San Antonio" },
-                        new City() { Name = "Dallas" },
-                        new City() { Name = "Austin" },
-                        new City() { Name = "El Paso" },
-                    }
-                },
+                throw new FileNotFoundException($"No se encontró el archivo SQL en la ruta: {filePath}");
             }
-                });
+
+            var sqlContent = File.ReadAllText(filePath);
+
+            try
+            {
+                _context.Database.SetCommandTimeout(300);
+                await _context.Database.ExecuteSqlRawAsync(sqlContent);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                // Aquí puedes registrar el error o manejarlo según sea necesario
             }
 
             await _context.SaveChangesAsync();

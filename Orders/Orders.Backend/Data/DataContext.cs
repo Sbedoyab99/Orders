@@ -16,6 +16,13 @@ namespace Orders.Backend.Data
         public DbSet<State> States { get; set; }
         public DbSet<City> Cities { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder
+                .UseSqlServer(
+                    @"name=LocalConnection",
+                    o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery));
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
