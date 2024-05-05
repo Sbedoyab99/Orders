@@ -74,7 +74,6 @@ namespace Orders.Backend.Repositories.Implementations
             return await _userManager.UpdateAsync(user);
         }
 
-
         public async Task<bool> IsUserInRoleAsync(User user, string roleName)
         {
             return await _userManager.IsInRoleAsync(user, roleName);
@@ -82,12 +81,22 @@ namespace Orders.Backend.Repositories.Implementations
 
         public async Task<SignInResult> LogInAsync(LoginDTO model)
         {
-            return await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+            return await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, true);
         }
 
         public async Task LogOutAsync()
         {
             await _signInManager.SignOutAsync();
+        }
+
+        public async Task<string> GenerateEmailConfirmationTokenAsync(User user)
+        {
+            return await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        }
+
+        public async Task<IdentityResult> ConfirmEmailAsync(User user, string token)
+        {
+            return await _userManager.ConfirmEmailAsync(user, token);
         }
     }
 }

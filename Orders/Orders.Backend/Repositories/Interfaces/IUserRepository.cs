@@ -25,5 +25,9 @@ namespace Orders.Backend.Repositories.Interfaces
         Task<SignInResult> LogInAsync(LoginDTO model);
 
         Task LogOutAsync();
+
+        Task<string> GenerateEmailConfirmationTokenAsync(User user);
+
+        Task<IdentityResult> ConfirmEmailAsync(User user, string token);
     }
 }

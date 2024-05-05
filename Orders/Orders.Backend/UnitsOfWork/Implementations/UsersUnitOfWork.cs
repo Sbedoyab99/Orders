@@ -34,5 +34,9 @@ namespace Orders.Backend.UnitsOfWork.Implementations
         public Task<SignInResult> LogInAsync(LoginDTO model) => _usersRepository.LogInAsync(model);
 
         public Task LogOutAsync() => _usersRepository.LogOutAsync();
+
+        public async Task<string> GenerateEmailConfirmationTokenAsync(User user) => await _usersRepository.GenerateEmailConfirmationTokenAsync(user);
+
+        public async Task<IdentityResult> ConfirmEmailAsync(User user, string token) => await _usersRepository.ConfirmEmailAsync(user, token);
     }
 }
