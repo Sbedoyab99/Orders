@@ -22,7 +22,7 @@ namespace Orders.Backend.Data
             await CheckCountriesAsync();
             await CheckCategoriesAsync();
             await CheckRolesAsync();
-            await CheckUserAsync("1010", "Santiago", "Bedoya", "bedoya@yopmail.com", "3205533944", "Calle Nueva", UserType.Admin);
+            await CheckUserAsync("1039475784", "Santiago", "Bedoya", "bedoya@yopmail.com", "3205533944", "Calle Nueva", UserType.Admin);
         }
 
         private async Task<User> CheckUserAsync(string document, string firstName, string lastName, string email, string phone, string address, UserType userType)
