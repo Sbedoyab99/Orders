@@ -29,7 +29,7 @@ namespace Orders.Frontend.Pages.Auth
             }
 
             await SweetAlertService.FireAsync("Confirmación", "Gracias por confirmar su email, ahora puedes ingresar al sistema.", SweetAlertIcon.Info);
-            Modal.Show<Login>();
+            Modal.Show<LogIn>();
         }
     }
 }

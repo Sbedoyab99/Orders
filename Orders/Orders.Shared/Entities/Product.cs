@@ -32,5 +32,18 @@ namespace Orders.Shared.Entities
         [Display(Name = "Inventario")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public float Stock { get; set; }
+
+        public ICollection<ProductCategory>? ProductCategories { get; set; }
+
+        [Display(Name = "Categorías")]
+        public int ProductCategoriesNumber => ProductCategories == null || ProductCategories.Count == 0 ? 0 : ProductCategories.Count;
+
+        public ICollection<ProductImage>? ProductImages { get; set; }
+
+        [Display(Name = "Imágenes")]
+        public int ProductImagesNumber => ProductImages == null || ProductImages.Count == 0 ? 0 : ProductImages.Count;
+
+        [Display(Name = "Imagén")]
+        public string MainImage => ProductImages == null || ProductImages.Count == 0 ? string.Empty : ProductImages.FirstOrDefault()!.Image;
     }
 }
