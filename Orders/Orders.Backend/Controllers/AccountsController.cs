@@ -253,6 +253,28 @@ namespace Orders.Backend.Controllers
                 $"<b><a href ={tokenLink}>Confirmar Email</a></b>");
         }
 
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
+        {
+            var response = await _usersUnitOfWork.GetAsync(pagination);
+            if (response.WasSuccess)
+            {
+                return Ok(response.Result);
+            }
+            return BadRequest();
+        }
+
+        [HttpGet("totalPages")]
+        public async Task<IActionResult> GetPagesAsync([FromQuery] PaginationDTO pagination)
+        {
+            var action = await _usersUnitOfWork.GetTotalPagesAsync(pagination);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            return BadRequest();
+        }
+
         private TokenDTO BuildToken(User user)
         {
             var claims = new List<Claim>
@@ -282,6 +304,6 @@ namespace Orders.Backend.Controllers
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = expiration
             };
-        }
+        }       
     }
 }
